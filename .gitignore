@@ -1,0 +1,28 @@
+# Python virtual environment
+.venv/
+
+# Output files and folders
+output/
+*.avi
+*.mp4
+
+# Python cache and logs
+__pycache__/
+*.pyc
+*.pyo
+*.log
+
+# VS Code settings
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Jupyter and notebook files
+.ipynb_checkpoints/
+*.ipynb
+
+# Misc
+*.bak
+*.tmp
