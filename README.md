@@ -138,8 +138,9 @@ offline testing tools, and pythonic design patterns for enterprise scalability."
 # 4. Create GitHub repository (choose visibility)
 gh repo create fruits-quality-detection --private --source=. --remote=origin
 
-# 5. Push to main branch
-git push -u origin main
+# 5. Rename branch to master and push
+git branch -M master
+git push -u origin master
 ```
 
 ### Feature Branch Workflow
@@ -161,13 +162,13 @@ git commit -m "feat: Add new feature description"
 git push -u origin feature/your-feature-name
 
 # 6. Create pull request via GitHub CLI
-gh pr create --title "Add your feature" --body "Description of changes"
+gh pr create --title "Add your feature" --body "Description of changes" --base master
 
-# 7. After PR approval, merge to main
+# 7. After PR approval, merge to master
 gh pr merge --merge
 
-# 8. Switch back to main and pull latest
-git checkout main
+# 8. Switch back to master and pull latest
+git checkout master
 git pull
 
 # 9. Delete local feature branch (optional)
@@ -187,11 +188,11 @@ git log --oneline --graph --decorate --all
 git checkout -b feature/feature-name
 
 # Switch branches
-git checkout main
+git checkout master
 git checkout feature/feature-name
 
 # Pull latest changes
-git pull origin main
+git pull origin master
 
 # Push current branch
 git push
