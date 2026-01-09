@@ -1,28 +1,121 @@
-# Python virtual environment
-.venv/
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
 
-# Output files and folders
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+.virtualenv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.code-workspace
+
+# Environment variables (IMPORTANT: Never commit secrets!)
+.env
+.env.local
+.env.*.local
+
+# Output and generated files
 output/
+output/*.avi
+output/*.mp4
 *.avi
 *.mp4
 
-# Python cache and logs
-__pycache__/
-*.pyc
-*.pyo
-*.log
+# YOLO models (downloaded at runtime)
+*.pt
+yolov*.pt
 
-# VS Code settings
-.vscode/
+# Azure credentials (NEVER commit)
+*.azureauth
+*.publishsettings
 
 # OS files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
+desktop.ini
 
-# Jupyter and notebook files
+# Test coverage
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+.tox/
+.nox/
+
+# Jupyter
 .ipynb_checkpoints/
 *.ipynb
+profile_default/
+ipython_config.py
 
-# Misc
-*.bak
+# Data samples (large files - don't commit to git)
+data/samples/videos/*.mp4
+data/samples/videos/*.avi
+data/samples/images/*.jpg
+data/samples/images/*.png
+data/samples/images/*.jpeg
+
+# Logs
+*.log
+logs/
+*.log.*
+
+# Temporary files
 *.tmp
+*.bak
+*.swp
+*~.nib
+temp/
+tmp/
+
+# Python
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# MyPy
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre
+.pyre/
+
+# pytype
+.pytype/
+
+# Cython debug symbols
+cython_debug/
