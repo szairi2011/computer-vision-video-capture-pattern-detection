@@ -1,0 +1,112 @@
+{
+  "image": ".\\data\\samples\\fruits_quality.png",
+  "prompt_type": "distribution",
+  "response": {
+    "total_fruits": 72,
+    "detected_fruit_types": [
+      "apple",
+      "banana",
+      "orange"
+    ],
+    "statistics_by_fruit_type": [
+      {
+        "fruit_name": "apple",
+        "count": 12,
+        "percentage_of_total": 16.67,
+        "quality_distribution": {
+          "fresh": {
+            "count": 4,
+            "percentage": 33.33
+          },
+          "moderate": {
+            "count": 3,
+            "percentage": 25.0
+          },
+          "poor": {
+            "count": 2,
+            "percentage": 16.67
+          },
+          "rotten": {
+            "count": 3,
+            "percentage": 25.0
+          }
+        },
+        "average_quality_score": 0.54
+      },
+      {
+        "fruit_name": "banana",
+        "count": 45,
+        "percentage_of_total": 62.5,
+        "quality_distribution": {
+          "fresh": {
+            "count": 10,
+            "percentage": 22.22
+          },
+          "moderate": {
+            "count": 8,
+            "percentage": 17.78
+          },
+          "poor": {
+            "count": 12,
+            "percentage": 26.67
+          },
+          "rotten": {
+            "count": 15,
+            "percentage": 33.33
+          }
+        },
+        "average_quality_score": 0.42
+      },
+      {
+        "fruit_name": "orange",
+        "count": 15,
+        "percentage_of_total": 20.83,
+        "quality_distribution": {
+          "fresh": {
+            "count": 6,
+            "percentage": 40.0
+          },
+          "moderate": {
+            "count": 4,
+            "percentage": 26.67
+          },
+          "poor": {
+            "count": 3,
+            "percentage": 20.0
+          },
+          "rotten": {
+            "count": 2,
+            "percentage": 13.33
+          }
+        },
+        "average_quality_score": 0.63
+      }
+    ],
+    "overall_quality_distribution": {
+      "fresh": {
+        "count": 20,
+        "percentage": 27.78
+      },
+      "moderate": {
+        "count": 15,
+        "percentage": 20.83
+      },
+      "poor": {
+        "count": 17,
+        "percentage": 23.61
+      },
+      "rotten": {
+        "count": 20,
+        "percentage": 27.78
+      }
+    },
+    "summary": "The distribution is dominated by bananas (62.5%), with a significant portion in poor or rotten condition. Apples and oranges show better quality overall, with oranges having the highest average quality score."
+  },
+  "usage": {
+    "prompt_tokens": 1784,
+    "completion_tokens": 539,
+    "total_tokens": 2323
+  },
+  "cost_usd": 0.034,
+  "response_time_ms": 25293.506383895874
+}

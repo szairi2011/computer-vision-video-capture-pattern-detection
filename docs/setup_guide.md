@@ -285,11 +285,157 @@ Check Azure Portal:
 
 ---
 
+## Azure AI Foundry Evaluation Setup
+
+**Purpose:** Quick evaluation of GPT-4V for intelligent fruit quality assessment (temporary - evaluation branch only)
+
+**Branch:** `azure-ai-foundry`
+
+### Quick Setup (1-2 Day Evaluation)
+
+#### 1. Install Evaluation Dependencies
+
+```powershell
+# Activate venv
+.venv\Scripts\Activate.ps1
+
+# Install Azure OpenAI SDK
+pip install openai>=1.0.0 pillow
+
+# Save dependencies
+pip freeze > requirements-eval.txt
+```
+
+#### 2. Azure Portal Setup
+
+**Option A: Azure Portal (Recommended for first time)**
+
+**Step-by-step navigation:**
+
+1. **Create Azure OpenAI resource:**
+   - Navigate to https://portal.azure.com
+   - Click **☰ hamburger menu** (top-left) → **"Create a resource"**
+   - In search box, type: **`Azure OpenAI`**
+   - Select **"Azure OpenAI"** (Microsoft) → Click **"Create"**
+   - **Basics tab:**
+     - Subscription: (select your trial/paid)
+     - Resource Group: Click **"Create new"** → Name: `rg-fruits-quality-eval` → **OK**
+     - Region: Select **East US** (best GPT-4V model availability)
+     - Name: `fruits-quality-openai-001` (globally unique - adjust if taken)
+     - Pricing tier: **Standard S0**
+   - **Network tab:** Leave default (all networks)
+   - Click **"Review + create"** → **"Create"**
+   - Wait 2-4 minutes for deployment
+   - Click **"Go to resource"** when complete
+
+2. **Deploy GPT-4V model:**
+   - Open new tab: https://ai.azure.com
+   - Sign in with same Azure account
+   - If prompted: **"Create project"**
+     - Name: `FruitsQualityEval`
+     - Resource: Select `fruits-quality-openai-001`
+     - Click **"Create"**
+   - Left sidebar → **"Deployments"** (under Shared resources)
+   - Click **"+ Create deployment"** or **"+ Deploy model"** → **"Deploy base model"**
+   - **Select model:**
+     - Model family: **gpt-4**
+     - Model: **`gpt-4o`** (recommended, version 2024-05-13+) or **`gpt-4-vision-preview`**
+   - **Configure:**
+     - Deployment name: `fruit-quality-gpt4v` (exact name)
+     - Deployment type: **Standard**
+     - Tokens per minute rate limit: **10** (10,000 TPM - sufficient for eval)
+   - Click **"Deploy"** → Wait 30-60 seconds
+   - Verify: Status shows **✓ Running** (green checkmark)
+
+3. **Get credentials:**
+   - Return to Azure Portal (portal.azure.com)
+   - Navigate to your resource: `fruits-quality-openai-001`
+   - Left sidebar → **"Keys and Endpoint"** (under Resource Management)
+   - Copy **Endpoint** (click 📋 icon): `https://fruits-quality-openai-001.openai.azure.com/`
+   - Click **"Show Key"** next to KEY 1 → Copy key (click 📋)
+   - Save both securely for `.env` file
+
+**Option B: Azure CLI (Faster)**
+
+```powershell
+# Login
+az login
+
+# Create resource
+az cognitiveservices account create `
+  --name fruits-quality-openai-001 `
+  --resource-group rg-fruits-quality-eval `
+  --kind OpenAI `
+  --sku S0 `
+  --location eastus
+
+# Get credentials
+az cognitiveservices account show `
+  --name fruits-quality-openai-001 `
+  --resource-group rg-fruits-quality-eval `
+  --query properties.endpoint --output tsv
+
+az cognitiveservices account keys list `
+  --name fruits-quality-openai-001 `
+  --resource-group rg-fruits-quality-eval `
+  --query key1 --output tsv
+```
+
+#### 3. Configure Environment
+
+Add to `.env` file:
+
+```bash
+# Azure AI Foundry Evaluation
+AZURE_OPENAI_ENDPOINT=https://fruits-quality-openai-001.openai.azure.com/
+AZURE_OPENAI_API_KEY=your-api-key-here
+AZURE_OPENAI_DEPLOYMENT=fruit-quality-gpt4v
+AZURE_OPENAI_API_VERSION=2024-02-15-preview
+```
+
+#### 4. Verify Connection
+
+```powershell
+python evaluation/scripts/eval_single_image.py --test-connection
+```
+
+**Expected output:**
+```
+✓ Connection successful
+Endpoint: https://fruits-quality-openai-001.openai.azure.com/
+Deployment: fruit-quality-gpt4v
+```
+
+### Cost Management
+
+**GPT-4V Pricing (approximate):**
+- Input: $0.01 per 1K tokens
+- Output: $0.03 per 1K tokens  
+- Image: ~1000-1500 tokens each
+
+**Estimated evaluation costs:**
+- Single image: $0.02-$0.04
+- 100 images: $2-$4
+- Trial credit: $200 (sufficient)
+
+**Track costs:**
+```powershell
+python evaluation/scripts/eval_single_image.py --show-costs
+```
+
+### Detailed Setup
+
+See comprehensive guide: [evaluation/azure_ai_foundry/setup_guide.md](../evaluation/azure_ai_foundry/setup_guide.md)
+
+---
+
 **Related Documentation:**
 - [Architecture](architecture.md) - System design and components
 - [Execution Guide](execution_guide.md) - Running demos and scenarios
+- [Azure AI Foundry Evaluation](execution_guide.md#azure-ai-foundry-evaluation) - Evaluation commands
 - [README](../README.md) - Project overview
 
 **Next Steps:**
 - [Run Demo Scenarios](execution_guide.md#demo-scenarios)
+- [Run Azure AI Foundry Evaluation](execution_guide.md#azure-ai-foundry-evaluation)
 - [Deploy to Production](execution_guide.md#deployment-scenarios)

@@ -713,12 +713,269 @@ curl -X GET "https://fruits-quality-search.search.windows.net/indexes/fruits-qua
 
 ---
 
+## Azure AI Foundry Evaluation
+
+**Purpose:** Rapid evaluation of GPT-4V for intelligent fruit quality assessment vs. current heuristic method
+
+**Branch:** `azure-ai-foundry` (temporary evaluation branch)
+
+**Prerequisites:** Complete [Azure AI Foundry Setup](setup_guide.md#azure-ai-foundry-evaluation-setup)
+
+### Quick Start
+
+#### Test Connection
+
+```powershell
+python evaluation/scripts/eval_single_image.py --test-connection
+```
+
+**Expected output:**
+```
+✓ Connection successful
+Endpoint: https://fruits-quality-openai-001.openai.azure.com/
+Deployment: fruit-quality-gpt4v
+```
+
+### Evaluation Scenarios
+
+#### Scenario 1: Single Image Assessment
+
+**Use Case:** Test GPT-4V quality scoring on one image
+
+```powershell
+# Basic evaluation with structured JSON response
+python evaluation/scripts/eval_single_image.py data/samples/apple.jpg
+
+# Use simple scoring prompt
+python evaluation/scripts/eval_single_image.py data/samples/banana.jpg --prompt simple
+
+# Save results to file
+python evaluation/scripts/eval_single_image.py data/samples/orange.jpg --output evaluation/results/orange_eval.json
+
+# Use defect detection prompt
+python evaluation/scripts/eval_single_image.py data/samples/bruised_apple.jpg --prompt defect
+```
+
+**Output:**
+```
+==========================================================
+GPT-4V RESPONSE:
+==========================================================
+{
+  "fruit_type": "apple",
+  "freshness_level": "fresh",
+  "quality_score": 0.85,
+  "visual_indicators": ["bright red color", "smooth skin"],
+  "defects": [],
+  "recommendation": "sell"
+}
+
+==========================================================
+USAGE STATISTICS:
+==========================================================
+Response time: 1234.56 ms
+Prompt tokens: 1205
+Completion tokens: 87
+Total tokens: 1292
+
+Estimated cost: $0.0147 USD
+```
+
+---
+
+#### Scenario 2: Batch Evaluation
+
+**Use Case:** Test multiple images to analyze cost and performance
+
+```powershell
+# Evaluate all images in directory
+python evaluation/scripts/eval_batch.py data/samples/
+
+# Limit to 10 images
+python evaluation/scripts/eval_batch.py data/samples/ --max-images 10
+
+# Use comparison prompt
+python evaluation/scripts/eval_batch.py data/samples/ --prompt comparison
+
+# Custom output location
+python evaluation/scripts/eval_batch.py data/samples/ --output evaluation/results/my_batch.json
+```
+
+**Output:**
+```
+==========================================================
+BATCH EVALUATION SUMMARY
+==========================================================
+Total images: 25
+Successful: 25
+Failed: 0
+
+Average tokens per image: 1250.40
+Average response time: 1456.32 ms
+Total tokens used: 31260
+
+Total estimated cost: $0.3876 USD
+Average cost per image: $0.0155 USD
+
+Results saved to: evaluation/results/batch_results.json
+Cost tracking saved to: evaluation/results/cost_analysis.json
+```
+
+---
+
+#### Scenario 3: Method Comparison
+
+**Use Case:** Compare current heuristic scoring vs. GPT-4V assessment
+
+```powershell
+# Compare both methods on single image
+python evaluation/scripts/compare_methods.py data/samples/apple.jpg
+
+# Specify bounding box for current method
+python evaluation/scripts/compare_methods.py data/samples/shelf.jpg --bbox 100 150 300 450
+
+# Save comparison results
+python evaluation/scripts/compare_methods.py data/samples/banana.jpg --output evaluation/results/comparison.json
+```
+
+**Output:**
+```
+==========================================================
+COMPARISON: Current Method vs GPT-4V
+==========================================================
+
+Running current quality assessment method...
+  Score: 0.72
+  Freshness: moderate
+
+Running GPT-4V assessment...
+  Score: 0.68
+  Freshness: moderate
+  Response time: 1345.67 ms
+  Cost: $0.0142
+
+==========================================================
+COMPARISON ANALYSIS
+==========================================================
+Score difference: 0.04
+Agreement: high
+
+Current method: Fast, deterministic, no API cost
+GPT-4V: Slower, contextual, API cost: $0.0142
+```
+
+---
+
+### Available Prompt Templates
+
+```powershell
+# Structured JSON response (default)
+--prompt structured
+
+# Simple score + reason
+--prompt simple
+
+# Multiple fruits in one image
+--prompt batch
+
+# Focus on defect detection
+--prompt defect
+
+# A/B comparison to standards
+--prompt comparison
+```
+
+### Cost Tracking
+
+#### View Cost Summary
+
+```powershell
+python evaluation/scripts/eval_single_image.py --show-costs
+```
+
+**Output:**
+```
+==========================================================
+COST SUMMARY (All Evaluations)
+==========================================================
+Total sessions: 3
+Total requests: 35
+Total tokens: 43750
+Total cost: $0.5425 USD
+Avg per request: $0.015500 USD
+
+Session Breakdown:
+  - single_image_apple: 1 requests, $0.0147
+  - batch_samples: 25 requests, $0.3876
+  - single_image_banana: 1 requests, $0.0142
+```
+
+#### Cost Analysis File
+
+Detailed tracking saved to: `evaluation/results/cost_analysis.json`
+
+```json
+{
+  "generated_at": "2026-01-16T10:30:00",
+  "sessions": [...],
+  "total_cost_all_sessions": 0.5425
+}
+```
+
+### Expected Results
+
+**After 1-2 days of evaluation, you should have:**
+
+✅ GPT-4V quality scores for sample images  
+✅ Comparison data (heuristic vs. GPT-4V)  
+✅ Cost estimates per image  
+✅ Performance metrics (response times)  
+✅ Understanding of prompt engineering impact  
+✅ Data for backlog creation and estimation  
+
+### Evaluation Outputs
+
+**Generated files:**
+- `evaluation/results/batch_results.json` - Batch evaluation data
+- `evaluation/results/cost_analysis.json` - Cost tracking across all sessions
+- `evaluation/results/comparison.json` - Method comparison results
+- `evaluation/results/*_eval.json` - Individual evaluation results
+
+### Troubleshooting
+
+**Issue:** "Resource not found" or 404 errors  
+**Solution:** Verify deployment name matches `.env` setting
+```powershell
+az cognitiveservices account deployment list --name fruits-quality-openai-001 --resource-group rg-fruits-quality-eval
+```
+
+**Issue:** "Insufficient quota"  
+**Solution:** Increase tokens per minute in Azure Portal → Deployments → Edit
+
+**Issue:** "Model not available in region"  
+**Solution:** GPT-4V availability varies by region. Try: East US, Sweden Central, Australia East
+
+**Issue:** Connection timeout  
+**Solution:** Check firewall/proxy settings. Azure OpenAI requires HTTPS outbound access.
+
+### Next Steps After Evaluation
+
+1. **Document findings** in comparison report
+2. **Create backlog items** based on capabilities discovered
+3. **Estimate effort** for GPT-4V integration vs. current method
+4. **Demo results** to stakeholders
+5. **Decide integration approach** (full replacement, hybrid, or fallback)
+
+---
+
 **Related Documentation:**
 - [Setup Guide](setup_guide.md) - Installation and configuration
+- [Azure AI Foundry Setup](setup_guide.md#azure-ai-foundry-evaluation-setup) - Detailed setup steps
 - [Architecture](architecture.md) - System design
 - [README](../README.md) - Project overview
 
 **Need Help?**
-- Check [Architecture](architecture.md#design-patterns) for design details
+- Check [Azure AI Foundry Setup Guide](../evaluation/azure_ai_foundry/setup_guide.md) for detailed setup
+- Review [Architecture](architecture.md#design-patterns) for design details
 - Review [Setup Guide](setup_guide.md#verification) for configuration
 - Contact: sofiane@example.com

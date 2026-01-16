@@ -1,0 +1,35 @@
+{
+  "generated_at": "2026-01-16T16:34:12.319150",
+  "sessions": [
+    {
+      "session_name": "single_image_fruits_quality",
+      "description": "Evaluation of .\\data\\samples\\fruits_quality.png with distribution prompt",
+      "start_time": "2026-01-16T16:33:47.025644",
+      "requests": [
+        {
+          "timestamp": "2026-01-16T16:34:12.319150",
+          "image": ".\\data\\samples\\fruits_quality.png",
+          "model": "gpt-4o-2024-11-20",
+          "tokens": {
+            "prompt": 1784,
+            "completion": 539,
+            "total": 2323
+          },
+          "cost_usd": 0.03401,
+          "response_time_ms": 25293.51
+        }
+      ],
+      "total_tokens": 2323,
+      "total_cost_usd": 0.034,
+      "end_time": "2026-01-16T16:34:12.319150",
+      "statistics": {
+        "total_requests": 1,
+        "avg_response_time_ms": 25293.51,
+        "min_response_time_ms": 25293.51,
+        "max_response_time_ms": 25293.51,
+        "avg_tokens_per_request": 2323.0
+      }
+    }
+  ],
+  "total_cost_all_sessions": 0.034
+}

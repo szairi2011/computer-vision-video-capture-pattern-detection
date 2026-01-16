@@ -1,0 +1,12 @@
+{
+  "image": ".\\data\\samples\\fruits_quality.png",
+  "prompt_type": "simple",
+  "response": "SCORE: 0.2  \nREASON: The majority of the fruits in the image appear to be overripe, decayed, or moldy, with significant discoloration and visible spoilage. Only a few fruits seem moderately fresh.  \nFRESHNESS: Poor",
+  "usage": {
+    "prompt_tokens": 1187,
+    "completion_tokens": 57,
+    "total_tokens": 1244
+  },
+  "cost_usd": 0.0136,
+  "response_time_ms": 6403.89347076416
+}
